@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LKMM Pra TD — Berita HMJTI</title>
+<meta name="description" content="Latihan Keterampilan Manajemen Mahasiswa Pra-Tingkat Dasar membekali mahasiswa baru dengan dasar manajemen diri, kepemimpinan, komunikasi, dan pengembangan potensi diri.">
+<meta name="theme-color" content="#0A2647">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0A2647;--blue:#1d5fd1;--ink:#17202e;--muted:#5b6b82;--line:#e3e8ef;--soft:#f5f7fa}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink);background:#fff;line-height:1.6}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+.progress{position:fixed;top:0;left:0;height:3px;width:0;background:#f2a900;z-index:20}
+.top{background:var(--navy);color:#fff;position:sticky;top:0;z-index:10}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px}
+.brand{font-weight:800;font-size:20px;letter-spacing:.02em}
+.brand span{font-weight:500;font-size:13px;opacity:.75;margin-left:8px;padding-left:10px;border-left:1px solid rgba(255,255,255,.3)}
+.back{font-size:14px;font-weight:600;border:1px solid rgba(255,255,255,.35);padding:7px 14px;border-radius:6px;white-space:nowrap}
+.back:hover{background:#fff;color:var(--navy)}
+.crumb{font-size:13px;color:var(--muted);padding:18px 0;border-bottom:1px solid var(--line)}
+.crumb a:hover{color:var(--blue)}
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:48px;padding-top:32px;padding-bottom:56px}
+.kicker{display:inline-block;background:var(--blue);color:#fff;font-size:12px;font-weight:700;padding:4px 10px;border-radius:3px}
+h1{font-family:'Source Serif 4',Georgia,serif;font-size:clamp(28px,4.6vw,44px);line-height:1.15;margin:14px 0;color:var(--navy)}
+.dek{font-size:18px;color:var(--muted)}
+.byline{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:14px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin:22px 0}
+.author b{display:block;font-size:14px}
+.author small{color:var(--muted);font-size:13px}
+.share{display:flex;gap:8px}
+.share button{font:600 13px 'Plus Jakarta Sans',sans-serif;border:1px solid var(--line);background:#fff;color:var(--ink);padding:8px 13px;border-radius:6px;cursor:pointer}
+.share button:hover{border-color:var(--blue);color:var(--blue)}
+figure img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:6px;background:var(--soft);cursor:zoom-in}
+figcaption{font-size:13px;color:var(--muted);padding:10px 0;border-bottom:1px solid var(--line)}
+.body{font-family:'Source Serif 4',Georgia,serif;font-size:19px;line-height:1.8;margin-top:26px}
+.body p{margin-bottom:20px}
+.body p:first-child::first-letter{float:left;font-size:64px;line-height:.95;font-weight:700;color:var(--navy);padding:4px 10px 0 0}
+.body h2{font-size:25px;color:var(--navy);margin:30px 0 12px}
+.body ul{margin:0 0 20px 22px}
+.info{background:var(--soft);border-left:4px solid var(--navy);padding:20px 22px;margin-top:30px}
+.info h3{font-size:15px;margin-bottom:10px}
+.info dl{display:grid;grid-template-columns:140px 1fr;gap:6px 12px;font-size:14px}
+.info dt{color:var(--muted)}
+.info dd{font-weight:600}
+aside h3{font-size:16px;color:var(--navy);border-bottom:3px solid var(--navy);padding-bottom:8px;margin-bottom:6px}
+.side{position:sticky;top:88px}
+.rel{display:grid;grid-template-columns:96px 1fr;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.rel img{width:96px;height:72px;object-fit:cover;border-radius:4px;background:var(--soft)}
+.rel b{display:block;font-family:'Source Serif 4',Georgia,serif;font-size:15px;line-height:1.35}
+.rel small{color:var(--muted);font-size:12px}
+.rel:hover b{color:var(--blue)}
+.pager{display:flex;justify-content:space-between;gap:16px;margin-top:34px;font-size:14px;font-weight:700;color:var(--blue)}
+footer{background:var(--navy);color:#cfd9e8;font-size:13px;padding:26px 0;text-align:center}
+.zoom{position:fixed;inset:0;background:rgba(5,14,28,.94);display:none;place-items:center;padding:20px;z-index:30;cursor:zoom-out}
+.zoom.show{display:grid}
+.zoom img{max-height:90vh;border-radius:4px}
+@media(max-width:860px){.layout{grid-template-columns:1fr;gap:40px}.side{position:static}}
+@media(max-width:520px){.brand span{display:none}.body{font-size:17.5px}.info dl{grid-template-columns:1fr}}
+@media print{.top,.share,aside,.progress,.pager{display:none}.layout{display:block}}
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<header class="top"><div class="wrap">
+  <a href="index.html" class="brand">PENAJI<span>Berita HMJTI</span></a>
+  <a href="index.html#galeri" class="back">&larr; Kembali ke Galeri</a>
+</div></header>
+
+<div class="wrap">
+  <nav class="crumb" aria-label="Breadcrumb"><a href="index.html">Beranda</a> / <a href="index.html#galeri">Dokumentasi</a> / LKMM Pra TD</nav>
+</div>
+
+<main class="wrap layout">
+  <article>
+    <span class="kicker">Administrasi</span>
+    <h1>LKMM Pra TD</h1>
+    <p class="dek">Latihan Keterampilan Manajemen Mahasiswa Pra-Tingkat Dasar membekali mahasiswa baru dengan dasar manajemen diri, kepemimpinan, komunikasi, dan pengembangan potensi diri.</p>
+    <div class="byline">
+      <div class="author"><b>Departemen Kominfo HMJTI</b><small>1 Oktober 2026 &middot; <span id="readTime">1</span> menit baca</small></div>
+      <div class="share">
+        <button type="button" id="shareWa">Bagikan ke WhatsApp</button>
+        <button type="button" id="copyLink">Salin Tautan</button>
+      </div>
+    </div>
+    <figure>
+      <img src="assets/galeri2.jpeg" alt="Dokumentasi LKMM Pra TD" id="heroImg">
+      <figcaption>Dokumentasi LKMM Pra TD. (Foto: HMJTI Polije)</figcaption>
+    </figure>
+    <div class="body" id="articleBody">
+      <p>LKMM Pra-TD adalah Latihan Keterampilan Manajemen Mahasiswa Pra-Tingkat Dasar, pelatihan wajib bagi mahasiswa baru untuk membekali diri dengan dasar-dasar manajemen diri, kepemimpinan, komunikasi, dan pengembangan potensi diri agar mampu beradaptasi di kampus dan berorganisasi secara efektif, menjadi syarat penting kelulusan di beberapa universitas.</p>
+      <h2>Fokus Kegiatan</h2>
+      <p>Kegiatan ini fokus pada pengenalan diri, pemecahan masalah pribadi, pengaturan waktu, berpikir kritis, serta membangun karakter pemimpin sejak dini.</p>
+      <p>LKMM Pra-TD dilaksanakan pada tanggal 1 Oktober 2026.</p>
+    </div>
+    <div class="info">
+      <h3>Informasi Kegiatan</h3>
+      <dl>
+        <dt>Nama kegiatan</dt><dd>LKMM Pra TD</dd>
+        <dt>Penyelenggara</dt><dd>HMJTI Politeknik Negeri Jember</dd>
+        <dt>Departemen</dt><dd>Administrasi</dd>
+        <dt>Penanggung jawab</dt><dd>Ahmad Maulana Febri Hananto</dd>
+        <dt>Waktu</dt><dd>1 Oktober 2026</dd>
+      </dl>
+    </div>
+    <nav class="pager"><a href="galeri1.html">&larr; Sebelumnya</a><a href="galeri3.html">Selanjutnya &rarr;</a></nav>
+  </article>
+  <aside><div class="side">
+    <h3>Dokumentasi Lainnya</h3>
+    <a class="rel" href="galeri1.html"><img src="assets/galeri1.jpeg" alt=""><span><b>Sarasehan Mahasiswa &amp; Civitas JTI</b><small>Oktober 2026</small></span></a>
+    <a class="rel" href="galeri3.html"><img src="assets/galeri3.jpeg" alt=""><span><b>Upgrading &amp; Rapat Kerja Pengurus</b><small>September 2026</small></span></a>
+    <a class="rel" href="galeri4.html"><img src="assets/galeri4.jpeg" alt=""><span><b>JTI Coding Camp &amp; Pelatihan Web</b><small>Agustus 2026</small></span></a>
+  </div></aside>
+</main>
+
+<footer><div class="wrap">&copy; 2026 PENAJI — HMJTI Politeknik Negeri Jember</div></footer>
+
+<div class="zoom" id="zoom"><img src="assets/galeri2.jpeg" alt="Foto diperbesar"></div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+
+// Garis progres membaca
+function updateProgress() {
+  const max = document.documentElement.scrollHeight - innerHeight;
+  $("progress").style.width = (max > 0 ? (scrollY / max) * 100 : 0) + "%";
+}
+addEventListener("scroll", updateProgress, { passive: true });
+updateProgress();
+
+// Estimasi waktu baca (200 kata per menit)
+const words = $("articleBody").textContent.trim().split(/\s+/).length;
+$("readTime").textContent = Math.max(1, Math.ceil(words / 200));
+
+// Bagikan
+$("shareWa").addEventListener("click", () => {
+  const text = encodeURIComponent(document.title + "\n" + location.href);
+  window.open("https://api.whatsapp.com/send?text=" + text, "_blank", "noopener");
+});
+$("copyLink").addEventListener("click", async (e) => {
+  const btn = e.currentTarget;
+  try { await navigator.clipboard.writeText(location.href); btn.textContent = "Tautan disalin"; }
+  catch (err) { prompt("Salin tautan berikut:", location.href); }
+  setTimeout(() => (btn.textContent = "Salin Tautan"), 2000);
+});
+
+// Perbesar foto
+$("heroImg").addEventListener("click", () => $("zoom").classList.add("show"));
+$("zoom").addEventListener("click", () => $("zoom").classList.remove("show"));
+addEventListener("keydown", (e) => { if (e.key === "Escape") $("zoom").classList.remove("show"); });
+</script>
+</body>
+</html>

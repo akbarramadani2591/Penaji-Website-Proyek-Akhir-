@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return num ? `https://wa.me/${num}?text=${text}` : `https://api.whatsapp.com/send?text=${text}`;
   }
 
-  const successModal = $("successModal"), lightboxModal = $("lightboxModal");
+  const successModal = $("successModal");
 
   // Data disimpan di localStorage agar data aspirasi tidak hilang saat refresh.
   const STORE_KEY = "penaji.aspirasi.v1";
@@ -121,21 +121,39 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   // Program kerja HMJTI: tambah/ubah proker cukup lewat array PROKER.
-  // status: "Terlaksana" | "Berlangsung" | "Akan Datang"; dept harus sama dengan nama di DEP.
+  // waktu & status boleh dikosongkan (tidak ditampilkan). status: "Terlaksana" | "Berlangsung" | "Akan Datang".
+  // dept harus sama dengan nama di DEP. highlight: true = tampil di kartu Highlight.
   const STATUS_CLS = { "Terlaksana": "ok", "Berlangsung": "on", "Akan Datang": "soon" };
   const PROKER = [
-    { nama: "Upgrading & Rapat Kerja Pengurus", dept: "Administrasi", waktu: "September 2026", status: "Terlaksana", isi: "Penguatan kapasitas pengurus dan penyusunan rencana kerja satu periode agar seluruh departemen berjalan selaras." },
-    { nama: "Pengarsipan Digital Organisasi", dept: "Administrasi", waktu: "Sepanjang 2026", status: "Berlangsung", isi: "Digitalisasi surat-menyurat, notulen, dan laporan kegiatan agar mudah dicari dan dipertanggungjawabkan." },
-    { nama: "JTI Coding Camp & Pelatihan Web", dept: "Keilmuan", waktu: "Agustus 2026", status: "Terlaksana", isi: "Pelatihan pengembangan web untuk mahasiswa JTI, dari dasar HTML/CSS/JS sampai membangun proyek mini." },
-    { nama: "JTI Tech Fest & Hackathon 2026", dept: "Keilmuan", waktu: "Oktober 2026", status: "Terlaksana", isi: "Ajang kompetisi dan pameran karya teknologi untuk menyalurkan inovasi mahasiswa lintas program studi." },
-    { nama: "Kompetisi UI/UX Design Internal", dept: "Keilmuan", waktu: "Desember 2026", status: "Akan Datang", isi: "Kompetisi desain antar angkatan sebagai wadah latihan dan seleksi menuju lomba tingkat nasional." },
-    { nama: "Sarasehan Mahasiswa & Civitas JTI", dept: "Perhubungan", waktu: "Oktober 2026", status: "Terlaksana", isi: "Forum dialog terbuka antara mahasiswa, dosen, dan pimpinan jurusan untuk membahas kebutuhan perkuliahan." },
-    { nama: "Kunjungan Alumni & Industri", dept: "Perhubungan", waktu: "Januari 2027", status: "Akan Datang", isi: "Silaturahmi dengan alumni dan mitra industri untuk membuka wawasan karier dan peluang magang." },
-    { nama: "Infografis Layanan Kemahasiswaan", dept: "Kominfo", waktu: "November 2026", status: "Berlangsung", isi: "Merangkum alur layanan kemahasiswaan, seperti dispensasi lomba, dalam infografis resmi di media sosial HMJTI." },
-    { nama: "Publikasi & Dokumentasi Kegiatan", dept: "Kominfo", waktu: "Sepanjang 2026", status: "Berlangsung", isi: "Konten kreatif dan dokumentasi seluruh kegiatan HMJTI di TikTok, Instagram, dan YouTube." },
-    { nama: "Merchandise Resmi HMJTI", dept: "Kewirausahaan", waktu: "November 2026", status: "Berlangsung", isi: "Produksi dan penjualan merchandise resmi sebagai identitas himpunan sekaligus sumber dana kegiatan." },
-    { nama: "Bazar Kewirausahaan Mahasiswa TI", dept: "Kewirausahaan", waktu: "Desember 2026", status: "Akan Datang", isi: "Bazar produk dan jasa karya mahasiswa untuk melatih jiwa wirausaha di lingkungan kampus." },
+    // Administrasi
+    { nama: "Rapat Anggota Tahunan", dept: "Administrasi", waktu: "", status: "", isi: "Forum tahunan anggota himpunan untuk membahas jalannya organisasi dan mengambil keputusan bersama." },
+    { nama: "Reformasi Akhir Periode (Evaluasi)", dept: "Administrasi", waktu: "", status: "", isi: "Evaluasi kinerja kepengurusan dan program kerja di akhir periode sebagai bahan perbaikan ke depan." },
+    { nama: "LKMM Pra TD", dept: "Administrasi", waktu: "", status: "", isi: "Latihan Keterampilan Manajemen Mahasiswa Pra Tingkat Dasar sebagai pengenalan awal keterampilan berorganisasi." },
+    { nama: "LKMM TD", dept: "Administrasi", waktu: "", status: "", isi: "Latihan Keterampilan Manajemen Mahasiswa Tingkat Dasar untuk mengasah kemampuan manajemen dan kepemimpinan mahasiswa." },
+    { nama: "Harmonisasi Pengurus HMJTI", dept: "Administrasi", waktu: "", status: "", isi: "Kegiatan kebersamaan untuk mempererat kekeluargaan dan kekompakan antarpengurus." },
+    { nama: "Harmonisasi HMJTI #2", dept: "Administrasi", waktu: "", status: "", isi: "Kegiatan harmonisasi lanjutan untuk menjaga kekompakan dan semangat kerja sama di HMJTI." },
+    { nama: "LDK dan Pelantikan Pengurus", dept: "Administrasi", waktu: "", status: "", isi: "Latihan Dasar Kepemimpinan yang dirangkaikan dengan pelantikan pengurus HMJTI." },
+    { nama: "Sosialisasi HMJTI 2025/2026", dept: "Administrasi", waktu: "", status: "", isi: "Pengenalan HMJTI periode 2025/2026 beserta peran dan kegiatannya kepada mahasiswa." },
+    // Keilmuan
+    { nama: "Competition Center", dept: "Keilmuan", waktu: "", status: "", isi: "Wadah informasi dan pengembangan bagi mahasiswa yang ingin mengikuti kompetisi." },
+    { nama: "EPIM Expo", dept: "Keilmuan", waktu: "", status: "", isi: "Pameran dalam rangkaian EPIM untuk menampilkan karya mahasiswa.", highlight: true },
+    { nama: "EPIM Web Programming", dept: "Keilmuan", waktu: "", status: "", isi: "Kompetisi pemrograman web dalam rangkaian EPIM." },
+    { nama: "EPIM Design Packaging", dept: "Keilmuan", waktu: "", status: "", isi: "Kompetisi desain kemasan dalam rangkaian EPIM." },
+    { nama: "ITC Mobile Legends: Bang Bang", dept: "Keilmuan", waktu: "", status: "", isi: "Information Technology Cup cabang e-sport Mobile Legends: Bang Bang (MLBB)." },
+    { nama: "ITC Futsal", dept: "Keilmuan", waktu: "", status: "", isi: "Information Technology Cup cabang olahraga futsal." },
+    { nama: "ITC Basket", dept: "Keilmuan", waktu: "", status: "", isi: "Information Technology Cup cabang olahraga bola basket." },
+    // Kewirausahaan
+    { nama: "Ramadhan Berkah", dept: "Kewirausahaan", waktu: "", status: "", isi: "Program kerja Departemen Kewirausahaan yang diselenggarakan dalam momentum bulan Ramadan." },
+    // Perhubungan
+    { nama: "Art Of Manunggalan (AOM)", dept: "Perhubungan", waktu: "", status: "", isi: "Acara festival tahunan yang diselenggarakan HMJTI.", highlight: true },
+    { nama: "Visit IT", dept: "Perhubungan", waktu: "", status: "", isi: "Kegiatan kunjungan untuk menjalin hubungan dan bertukar wawasan." },
+    { nama: "Apresiasi Wisudawan", dept: "Perhubungan", waktu: "", status: "", isi: "Bentuk penghargaan HMJTI kepada para wisudawan." },
   ];
+
+  // Baris waktu & status, hanya dibuat jika datanya diisi.
+  const prokerMeta = (p, cls) => p.waktu || p.status
+    ? `<div class="${cls}">${p.waktu ? `<time>${escapeHtml(p.waktu)}</time>` : ""}${p.status ? `<span class="sp s-${STATUS_CLS[p.status]}">${escapeHtml(p.status)}</span>` : ""}</div>`
+    : "";
 
   let pFilter = "all";
   function renderProker() {
@@ -145,7 +163,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const kadep = DEP.find((d) => d[0] === p.dept);
       return `
       <div class="reveal"><article class="pc">
-        <div class="pc-top"><time>${escapeHtml(p.waktu)}</time><span class="sp s-${STATUS_CLS[p.status]}">${escapeHtml(p.status)}</span></div>
+        ${prokerMeta(p, "pc-top")}
         <span class="pc-cat">${escapeHtml(p.dept)}</span>
         <h3 class="pc-title">${escapeHtml(p.nama)}</h3>
         <p class="pc-txt">${escapeHtml(p.isi)}</p>
@@ -155,13 +173,13 @@ document.addEventListener("DOMContentLoaded", () => {
     stagger(grid); observeAll(grid);
   }
 
-  // Highlight di hero: proker yang belum selesai lebih dulu, lalu yang terbaru terlaksana.
+  // Highlight di hero: proker bertanda highlight: true (maksimal 2).
   function renderHighlight() {
-    const items = [...PROKER.filter((p) => p.status !== "Terlaksana"), ...PROKER.filter((p) => p.status === "Terlaksana").reverse()].slice(0, 2);
+    const items = PROKER.filter((p) => p.highlight).slice(0, 2);
     const hl = $("hlList");
     hl.innerHTML = items.map((p, i) => `
       <a href="#proker" class="hl-i reveal" style="--i:${i + 3}">
-        <div class="hl-t"><time>${escapeHtml(p.waktu)}</time><span class="sp s-${STATUS_CLS[p.status]}">${escapeHtml(p.status)}</span></div>
+        ${prokerMeta(p, "hl-t")}
         <b>${escapeHtml(p.nama)}</b><p>${escapeHtml(p.isi)}</p></a>`).join("");
     observeAll(hl);
   }
@@ -172,18 +190,18 @@ document.addEventListener("DOMContentLoaded", () => {
     pFilter = b.dataset.f; renderProker();
   }));
 
-  // Galeri carousel: tambah foto cukup dengan menambah objek ke GALERI.
+  // Galeri carousel: tambah objek ke GALERI (url = halaman berita yang dibuka saat foto diklik).
   const GALERI = [
-    { img: "assets/galeri-1.jpg", t: "Sarasehan Mahasiswa & Civitas JTI", d: "Oktober 2026 • Gedung JTI Polije", tag: "Forum Aspirasi" },
-    { img: "assets/galeri-2.jpg", t: "JTI Tech Fest & Hackathon 2026", d: "Oktober 2026 • Lab Rekayasa Perangkat Lunak", tag: "Teknologi" },
-    { img: "assets/galeri-3.jpg", t: "Upgrading & Rapat Kerja Pengurus", d: "September 2026 • Politeknik Negeri Jember", tag: "Internal" },
-    { img: "assets/galeri-4.jpg", t: "JTI Coding Camp & Pelatihan Web", d: "Agustus 2026 • Lab Pemrograman JTI", tag: "Edukasi" },
+    { img: "assets/galeri1.jpeg", url: "galeri1.html", t: "Art of Manunggalan (AOM)", d: "  Double Way Gerbang Belakang Polije" },
+    { img: "assets/galeri2.jpeg", url: "galeri2.html", t: "LKMM Pra TD", d: " Gedung JTI Polije " },
+    { img: "assets/galeri3.jpeg", url: "galeri3.html", t: "EPIM - TI", d: "  Gedung JTI Polije" },
+    { img: "assets/galeri4.jpeg", url: "galeri4.html", t: "Visit IT", d: "  "  },
   ];
   const tr = $("galTrack"), prev = $("galPrev"), next = $("galNext");
   tr.innerHTML = GALERI.map((g, i) => `
     <div class="reveal"><button type="button" class="slide" data-i="${i}">
       <img src="${g.img}" alt="${escapeHtml(g.t)}" loading="lazy" draggable="false" />
-      <span class="sl-ov"><em>${g.tag}</em><b>${escapeHtml(g.t)}</b><small>${g.d}</small></span>
+      <span class="sl-ov"><b>${escapeHtml(g.t)}</b><small>${g.d}</small></span>
     </button></div>`).join("");
   stagger(tr);
   const stepW = () => tr.querySelector(".slide").offsetWidth + 18;
@@ -205,37 +223,55 @@ document.addEventListener("DOMContentLoaded", () => {
     const s = e.target.closest(".slide");
     if (!s) return;
     if (moved) { moved = false; return; }
-    const g = GALERI[s.dataset.i];
-    $("lightboxImg").src = g.img; $("lightboxImg").alt = g.t;
-    $("lightboxTitle").textContent = g.t; $("lightboxDate").textContent = g.d;
-    lightboxModal.classList.remove("hidden");
+    window.location.href = GALERI[s.dataset.i].url;
   });
-  $("closeLightboxBtn").addEventListener("click", () => lightboxModal.classList.add("hidden"));
-  lightboxModal.addEventListener("click", (e) => { if (e.target === lightboxModal) lightboxModal.classList.add("hidden"); });
-  addEventListener("keydown", (e) => { if (e.key === "Escape") [lightboxModal, successModal].forEach((m) => m.classList.add("hidden")); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") successModal.classList.add("hidden"); });
 
   // ===== Bagan hierarki kepengurusan =====
-  // Isi tiap departemen: "!" di depan = Co Biro (diberi warna berbeda).
+  // Isi tiap departemen: [jabatan, [daftar nama]]. co: true = Co Biro (diberi warna berbeda).
+  // Nama Kepala Departemen diambil dari array DEP.
   const ORG_DEPT = {
-    "Perhubungan": ["Sekretaris Departemen", "!Co Biro Internal", "Anggota Biro Internal", "!Co Biro Eksternal", "Anggota Biro Eksternal"],
-    "Administrasi": ["Sekretaris Departemen", "!Co Biro Kesekretariatan", "Anggota Departemen"],
-    "Kewirausahaan": ["Sekretaris Departemen", "Anggota Departemen"],
-    "Kominfo": ["Sekretaris Departemen", "!Co Biro Sistem Informasi", "Anggota Biro Sistem Informasi", "!Co Biro Publikasi", "Anggota Biro Publikasi"],
-    "Keilmuan": ["!Co Biro Akademik", "Anggota Biro Akademik", "!Co Biro Non Akademik", "Anggota Biro Non Akademik"],
+    "Perhubungan": [
+      { r: "Sekretaris Departemen", n: ["Syavana Aurel Septiarsa"] },
+      
+      { r: "Anggota Biro Internal", n: ["Tristan Juliano Maldini", "Raindra Pratama", "Rezza Wahyu Setya Adhy", "Nadila Dewi Mustika", "Farin Sevany Kasih", "Dhina Rinata", "Kiswah Najwa Febiyana"] },
+      { r: "Co Biro Eksternal", n: ["Muzayyinatul Aulia"], co: true },
+      { r: "Anggota Biro Eksternal", n: ["Lili Kurnia Putri", "Dwi Fitria Wardaniah", "Eka Fitri Salsabilah"] },
+    ],
+    "Administrasi": [
+      { r: "Sekretaris Departemen", n: ["Febriana Rahmasari"] },
+      { r: "Co Biro Kesekretariatan", n: ["Maulany Ayuning Rahma"], co: true },
+      { r: "Anggota Departemen", n: ["Aldi Miftahul", "Rico Febrian", "Siti Aisyiyah", "Hanuum Rachmaniyar Salsabila"] },
+    ],
+    "Kewirausahaan": [
+      { r: "Sekretaris Departemen", n: ["Indra Nur Hafyyan"] },
+      { r: "Anggota Departemen", n: ["Fatimah Retnaning Larasati", "Lyra Aurelia", "Gadis Eka Pertiwi", "Radis Naila", "Lidya Aisyah Aprilia"] },
+    ],
+    "Kominfo": [
+      { r: "Sekretaris Departemen", n: ["Rifda Aprilia"] },
+      { r: "Co Biro Sistem Informasi", n: ["Safina Rahmatus Sa’diyah"], co: true },
+      { r: "Anggota Biro Sistem Informasi", n: ["Bambang Sugiarto"] },
+      { r: "Co Biro Publikasi", n: ["Diva Fidhelya Ariyani"], co: true },
+      { r: "Anggota Biro Publikasi", n: ["Fairuz Zaky Nugraha", "Muhammad Syahrul Mubarok", "Sujono", "Muhammad Miska Nayafie", "Uaryl Engno Laurenca", "Muhamad Nauval Zdakwan Utomo", "Wildan Ramadhani Akbar"] },
+    ],
+    "Keilmuan": [
+      { r: "Co Biro Akademik", n: ["Rafli Aulia Al Giffari"], co: true },
+      { r: "Anggota Biro Akademik", n: ["Rianty Arda Wijaya", "Nur Hidayatul Fitriyah", "Putri Denta Tama", "Linda Ratnadela Angraini", "Yanuarta Tri Widurani"] },
+      { r: "Co Biro Non Akademik", n: ["M. Rizky Niamuddin"], co: true },
+      { r: "Anggota Biro Non Akademik", n: ["Rasya Aurik", "Fauzi Rafi Abimanyu Nugraha"] },
+    ],
   };
   const ORG_ORDER = ["Perhubungan", "Administrasi", "Kewirausahaan", "Kominfo", "Keilmuan"];
 
-  const node = (title, sub, cls = "") => `<div class="o-node ${cls}"><b>${escapeHtml(title)}</b>${sub ? `<span>${escapeHtml(sub)}</span>` : ""}</div>`;
+  // sub boleh berupa satu nama (string) atau beberapa nama (array), satu nama per baris.
+  const node = (title, sub, cls = "") => `<div class="o-node ${cls}"><b>${escapeHtml(title)}</b>${[].concat(sub || []).filter(Boolean).map((n) => `<span style="display:block">${escapeHtml(n)}</span>`).join("")}</div>`;
   const vl = `<i class="o-vl"></i>`, vs = `<i class="o-vl o-vs"></i>`;
   const bph = (i) => node(BPH[i][1], BPH[i][0], "o-bph");
 
   function deptColumn(name) {
     const kadep = DEP.find((d) => d[0] === name);
     const rows = [node("Departemen " + name, "", "o-dept"), node("Kepala Departemen", kadep ? kadep[1] : "", "o-sm o-kd")];
-    ORG_DEPT[name].forEach((r) => {
-      const co = r.startsWith("!");
-      rows.push(node(co ? r.slice(1) : r, "", "o-sm" + (co ? " o-co" : "")));
-    });
+    ORG_DEPT[name].forEach((j) => rows.push(node(j.r, j.n, "o-sm" + (j.co ? " o-co" : ""))));
     return `<div class="o-col"><div class="o-stk">${rows.join(vs)}</div></div>`;
   }
 

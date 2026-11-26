@@ -35,7 +35,7 @@
         <nav class="tn-links" id="navMenu" aria-label="Navigasi utama">
           <a class="tl active" href="#beranda">Beranda</a>
           <a class="tl" href="#proker">Proker HMJTI</a>
-          <a class="tl" href="#dokumentasi">Dokumentasi</a>
+          <a class="tl" href="#galeri">Dokumentasi</a>
           <a class="tl" href="#aspirasi">Layanan Aspirasi</a>
           <a class="tl" href="#profil">Tentang HMJTI</a>
         </nav>
@@ -97,7 +97,7 @@
       <div class="container">
         <div class="sh reveal">
           <h2>Galeri Dokumentasi Kegiatan</h2>
-          <p>Geser untuk melihat dokumentasi kegiatan HMJTI. Ketuk foto untuk memperbesar.</p>
+          <p>Geser untuk melihat dokumentasi kegiatan HMJTI. Ketuk foto untuk membaca beritanya.</p>
         </div>
         <div class="car reveal">
           <div class="track" id="galTrack" tabindex="0" aria-label="Galeri foto kegiatan"></div>
@@ -149,7 +149,7 @@
             </div>
             <div class="card reveal" style="--i:1">
               <h3>Kategori yang ditampung</h3>
-              <div class="chips"><span>Akademik &amp; Perkuliahan</span><span>Program Kerja HMJTI</span><span>Lainnya</span></div>
+              <div class="chips"><span>Saran</span><span>Kritik</span><span>Usulan Program Kerja</span><span>Lainnya</span></div>
             </div>
           </div>
 
@@ -165,12 +165,12 @@
             <form id="aspirasiForm" novalidate>
               <div class="form-group">
                 <label for="inputNama" class="form-label">Nama Lengkap <span class="opt-tag">(Opsional)</span></label>
-                <input type="text" id="inputNama" class="form-control" placeholder="Contoh: Alfan Rizqy Prasetyo"
+                <input type="text" id="inputNama" class="form-control" placeholder="Nama Lengkap.."
                   autocomplete="name" />
               </div>
               <div class="form-group">
                 <label for="inputNim" class="form-label">NIM <span class="opt-tag">(Opsional)</span></label>
-                <input type="text" id="inputNim" class="form-control" placeholder="Contoh: E41261512" maxlength="12"
+                <input type="text" id="inputNim" class="form-control" placeholder="Nim:..." maxlength="12"
                   autocomplete="off" />
                 <span class="error-msg" id="errNim"></span>
               </div>
@@ -190,9 +190,11 @@
                   <label for="selectKategori" class="form-label">Kategori Aspirasi <span class="req">*</span></label>
                   <select id="selectKategori" class="form-control" required>
                     <option value="">Pilih kategori</option>
-                    <option value="Akademik &amp; Perkuliahan">Akademik &amp; Perkuliahan</option>
-                    <option value="Program Kerja HMJTI">Program Kerja HMJTI</option>
-                    <option value="Layanan Kemahasiswaan">Lainnya</option>
+                    <option value="Saran">Saran</option>
+                    <option value="Kritik">Kritik</option>
+                    <option value="Usulan Program Kerja">Usulan Program Kerja</option>
+
+                    <option value="Lainnya">Lainnya</option>
                   </select>
                   <span class="error-msg" id="errKategori"></span>
                 </div>
@@ -364,17 +366,6 @@
         <a class="btn btn-primary" id="waRetryBtn" href="#" target="_blank" rel="noopener noreferrer">Buka WhatsApp
           Lagi</a>
         <button type="button" class="btn btn-glass" id="closeSuccessModalBtn">Selesai</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop hidden no-print" id="lightboxModal" role="dialog" aria-modal="true">
-    <div class="modal-card lightbox-card">
-      <button type="button" class="modal-close" id="closeLightboxBtn" aria-label="Tutup Pratinjau">&times;</button>
-      <img src="" alt="" id="lightboxImg" class="lightbox-img" />
-      <div class="lightbox-caption">
-        <h4 id="lightboxTitle"></h4>
-        <p id="lightboxDate"></p>
       </div>
     </div>
   </div>
