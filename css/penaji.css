@@ -907,101 +907,218 @@ h3 {
   font-weight: 700
 }
 
-.bph {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-  gap: 14px
-}
-
-.dep {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 16px
-}
-
-.bph>.reveal,
-.dep>.reveal {
-  display: flex
-}
-
-.pp {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  padding: 16px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, .88);
-  border: 1px solid var(--line);
-  transition: transform .3s var(--ease), box-shadow .3s
-}
-
-.pp:hover {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 16px 34px rgba(11, 99, 206, .16)
-}
-
-.av {
-  flex: none;
-  width: 46px;
-  height: 46px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  font-weight: 800;
-  font-size: .92rem;
-  color: #fff;
-  background: linear-gradient(135deg, #0A2647, #0B63CE)
-}
-
-.pp b {
-  display: block;
-  font-size: .92rem;
-  color: #0A2647;
-  line-height: 1.3
-}
-
-.pp span {
-  font-size: .8rem;
+/* bagan hierarki kepengurusan */
+.org-hint {
+  margin: -6px 0 12px;
+  font-size: .84rem;
   color: var(--mut)
 }
 
-.dp {
-  display: block;
-  width: 100%;
-  padding: 20px;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, .88);
+.org-wrap {
+  overflow-x: auto;
+  border-radius: 22px;
   border: 1px solid var(--line);
-  transition: transform .3s var(--ease), box-shadow .3s
+  box-shadow: 0 12px 32px rgba(10, 38, 71, .07);
+  -webkit-overflow-scrolling: touch;
+  background: linear-gradient(rgba(255, 255, 255, .9), rgba(255, 255, 255, .9)), url(../assets/logohmjti.jpeg) center/min(800px, 90%) auto no-repeat, #fff
 }
 
-.dp:hover {
-  transform: translateY(-4px) scale(1.03);
-  box-shadow: 0 18px 38px rgba(11, 99, 206, .16)
+.org {
+  --w: 190px;
+  --g: 60px;
+  --lc: #8dbdf2;
+  min-width: 1120px;
+  padding: 36px 24px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center
 }
 
-.dp h4 {
-  margin: 0 0 4px;
-  font-size: 1.05rem;
-  color: #0B63CE
+.o-node {
+  box-sizing: border-box;
+  width: var(--w);
+  min-height: 56px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid var(--line);
+  box-shadow: 0 4px 12px rgba(10, 38, 71, .06);
+  transition: transform .25s var(--ease), box-shadow .25s, border-color .25s
 }
 
-.dp p {
-  margin: 10px 0 0;
+.o-node:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 24px rgba(11, 99, 206, .16);
+  border-color: #9cc7f5
+}
+
+.o-node b {
+  display: block;
   font-size: .86rem;
-  color: var(--mut);
-  line-height: 1.55
-}
-
-.dp strong {
-  font-size: .9rem;
+  line-height: 1.3;
   color: #0A2647
 }
 
-.dp small {
+.o-node span {
   display: block;
+  margin-top: 2px;
+  font-size: .76rem;
+  line-height: 1.35;
   color: var(--mut)
+}
+
+.o-top {
+  background: linear-gradient(145deg, #0A2647, #0B4FA8);
+  border-color: transparent
+}
+
+.o-top b {
+  color: #fff
+}
+
+.o-top span {
+  color: #bfdcff
+}
+
+.o-bph {
+  background: #EFF6FF;
+  border-color: #bcd7f6
+}
+
+.o-dept {
+  background: #0B63CE;
+  border-color: transparent
+}
+
+.o-dept b {
+  color: #fff;
+  font-size: .92rem
+}
+
+.o-sm {
+  min-height: 44px;
+  padding: 6px 10px
+}
+
+.o-sm b {
+  font-size: .8rem;
+  font-weight: 600
+}
+
+.o-co {
+  background: #EFF6FF;
+  border-color: #bcd7f6
+}
+
+.o-kd {
+  min-height: 66px
+}
+
+.o-kd b {
+  font-weight: 800
+}
+
+.o-vl {
+  display: block;
+  flex: none;
+  width: 2px;
+  height: 22px;
+  background: var(--lc)
+}
+
+.o-vs {
+  height: 10px
+}
+
+.o-row {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start
+}
+
+.o-col {
+  position: relative;
+  padding: 22px 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center
+}
+
+.o-col::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 2px;
+  height: 22px;
+  margin-left: -1px;
+  background: var(--lc)
+}
+
+.o-col::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--lc)
+}
+
+.o-col:first-child::after {
+  left: 50%
+}
+
+.o-col:last-child::after {
+  right: 50%
+}
+
+.o-col:only-child::after {
+  display: none
+}
+
+.o-split {
+  gap: var(--g)
+}
+
+.o-split>.o-col {
+  padding-left: 0;
+  padding-right: 0
+}
+
+.o-split>.o-col:first-child::after {
+  left: 50%;
+  right: calc(var(--g)/-2)
+}
+
+.o-split>.o-col:last-child::after {
+  left: calc(var(--g)/-2);
+  right: 50%
+}
+
+.o-merge {
+  box-sizing: content-box;
+  width: calc(var(--w) + var(--g) - 2px);
+  height: 20px;
+  border: 2px solid var(--lc);
+  border-top: 0
+}
+
+.o-stk {
+  display: flex;
+  flex-direction: column;
+  align-items: center
+}
+
+@media (prefers-reduced-motion:reduce) {
+  .o-node {
+    transition: none
+  }
 }
 
 /* footer: kanal resmi */
@@ -1167,10 +1284,6 @@ h3 {
     grid-template-columns: 1fr
   }
 
-  .tn-login {
-    display: none
-  }
-
   .hero-cta .btn {
     width: 100%
   }
@@ -1203,8 +1316,4 @@ h3 {
     opacity: 1;
     transform: none
   }
-}
-
-.admin-topbar {
-  top: 0
 }

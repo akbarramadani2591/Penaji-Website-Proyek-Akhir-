@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // ===== Konfigurasi WhatsApp =====
   // Isi nomor tujuan (format internasional tanpa + atau spasi, contoh: "6281234567890").
   // Awalan 0 otomatis diubah jadi 62. Jika dikosongkan, WhatsApp akan meminta pengguna memilih kontak sendiri.
-  const WA_NUMBER = "6285648685873";
+  const WA_NUMBER = "6282233152591";
 
   function buildWaUrl({ anonim, name, nim, prodi, kategori, isi }) {
     const lines = ["Halo Pengurus HMJTI, saya ingin menyampaikan aspirasi melalui PENAJI.", ""];
@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
   addEventListener("keydown", (e) => { if (e.key === "Escape") [lightboxModal, successModal].forEach((m) => m.classList.add("hidden")); });
 
   // ===== Bagan hierarki kepengurusan =====
-  // Isi tiap departemen: "!" di depan = Co Biro (diberi warna berbeda). Nama anggota bisa ditambah lewat string "Jabatan|Nama".
+  // Isi tiap departemen: "!" di depan = Co Biro (diberi warna berbeda).
   const ORG_DEPT = {
     "Perhubungan": ["Sekretaris Departemen", "!Co Biro Internal", "Anggota Biro Internal", "!Co Biro Eksternal", "Anggota Biro Eksternal"],
     "Administrasi": ["Sekretaris Departemen", "!Co Biro Kesekretariatan", "Anggota Departemen"],
@@ -225,30 +225,32 @@ document.addEventListener("DOMContentLoaded", () => {
   };
   const ORG_ORDER = ["Perhubungan", "Administrasi", "Kewirausahaan", "Kominfo", "Keilmuan"];
 
-  const node = (title, sub, cls = "") => `<div class="on ${cls}"><b>${escapeHtml(title)}</b>${sub ? `<span>${escapeHtml(sub)}</span>` : ""}</div>`;
-  const vl = `<i class="vl"></i>`, vs = `<i class="vl s"></i>`;
-  const bph = (i) => node(BPH[i][1], BPH[i][0], "bph");
+  const node = (title, sub, cls = "") => `<div class="o-node ${cls}"><b>${escapeHtml(title)}</b>${sub ? `<span>${escapeHtml(sub)}</span>` : ""}</div>`;
+  const vl = `<i class="o-vl"></i>`, vs = `<i class="o-vl o-vs"></i>`;
+  const bph = (i) => node(BPH[i][1], BPH[i][0], "o-bph");
 
   function deptColumn(name) {
     const kadep = DEP.find((d) => d[0] === name);
-    const rows = [node("Departemen " + name, "", "dept"), node("Kepala Departemen", kadep ? kadep[1] : "", "sm kd")];
+    const rows = [node("Departemen " + name, "", "o-dept"), node("Kepala Departemen", kadep ? kadep[1] : "", "o-sm o-kd")];
     ORG_DEPT[name].forEach((r) => {
       const co = r.startsWith("!");
-      rows.push(node(co ? r.slice(1) : r, "", "sm" + (co ? " co" : "")));
+      rows.push(node(co ? r.slice(1) : r, "", "o-sm" + (co ? " o-co" : "")));
     });
-    return `<div class="bc"><div class="stk">${rows.join(vs)}</div></div>`;
+    return `<div class="o-col"><div class="o-stk">${rows.join(vs)}</div></div>`;
   }
 
   $("orgChart").innerHTML =
-    node(BPH[0][1], BPH[0][0], "top") + vl +
+    node(BPH[0][1], BPH[0][0], "o-top") + vl +
     bph(1) + vl +
-    `<div class="br bph-split">
-       <div class="bc"><div class="stk">${bph(4)}${vl}${bph(5)}</div></div>
-       <div class="bc"><div class="stk">${bph(2)}${vl}${bph(3)}</div></div>
-     </div>` + vl +
-    `<div class="br">${ORG_ORDER.map(deptColumn).join("")}</div>`;
+    `<div class="o-row o-split">
+       <div class="o-col"><div class="o-stk">${bph(4)}${vl}${bph(5)}</div></div>
+       <div class="o-col"><div class="o-stk">${bph(2)}${vl}${bph(3)}</div></div>
+     </div>` +
+    `<div class="o-merge"></div>` + vl +
+    `<div class="o-row">${ORG_ORDER.map(deptColumn).join("")}</div>`;
 
-  // Navbar: state scroll, scrollspy, menu mobile
+  
+// Navbar: state scroll, scrollspy, menu mobile
   const nav = $("topnav"), links = [...document.querySelectorAll(".tl")], mb = $("mobileMenuBtn");
   const onScroll = () => nav.classList.toggle("scrolled", scrollY > 12);
   addEventListener("scroll", onScroll, { passive: true }); onScroll();
