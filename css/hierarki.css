@@ -1,0 +1,198 @@
+/* PENAJI — bagan hierarki kepengurusan. Dimuat setelah penaji.css */
+.org-hint {
+    margin: -6px 0 12px;
+    font-size: .84rem;
+    color: var(--mut)
+}
+
+.org-wrap {
+    overflow-x: auto;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, .9);
+    border: 1px solid var(--line);
+    box-shadow: 0 12px 32px rgba(10, 38, 71, .07);
+    -webkit-overflow-scrolling: touch
+}
+
+.org {
+    --lc: #9cc7f5;
+    min-width: 1120px;
+    padding: 32px 24px 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+/* node */
+.on {
+    width: 190px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: 0 4px 12px rgba(10, 38, 71, .06);
+    transition: transform .25s var(--ease), box-shadow .25s, border-color .25s
+}
+
+.on:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px rgba(11, 99, 206, .16);
+    border-color: #9cc7f5
+}
+
+.on b {
+    display: block;
+    font-size: .86rem;
+    line-height: 1.3;
+    color: #0A2647
+}
+
+.on span {
+    display: block;
+    margin-top: 2px;
+    font-size: .76rem;
+    color: var(--mut);
+    line-height: 1.35
+}
+
+.on.top {
+    background: linear-gradient(145deg, #0A2647, #0B4FA8);
+    border-color: transparent
+}
+
+.on.top b {
+    color: #fff
+}
+
+.on.top span {
+    color: #bfdcff
+}
+
+.on.bph {
+    background: #EFF6FF;
+    border-color: #bcd7f6
+}
+
+.on.dept {
+    background: #0B63CE;
+    border-color: transparent
+}
+
+.on.dept b {
+    color: #fff;
+    font-size: .92rem
+}
+
+.on.co {
+    background: #EFF6FF;
+    border-color: #bcd7f6
+}
+
+.on.sm {
+    padding: 8px 10px
+}
+
+.on.sm b {
+    font-size: .8rem;
+    font-weight: 600
+}
+
+.on.kd b {
+    font-weight: 800
+}
+
+/* garis penghubung */
+.vl {
+    display: block;
+    width: 2px;
+    height: 22px;
+    background: var(--lc)
+}
+
+.vl.s {
+    height: 10px
+}
+
+.br {
+    display: flex;
+    justify-content: center
+}
+
+.bc {
+    position: relative;
+    padding: 22px 10px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+.bc::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 2px;
+    height: 22px;
+    margin-left: -1px;
+    background: var(--lc)
+}
+
+.bc::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--lc)
+}
+
+.bc:first-child::after {
+    left: 50%
+}
+
+.bc:last-child::after {
+    right: 50%
+}
+
+.bc:only-child::after {
+    display: none
+}
+
+.br.bph-split {
+    gap: 60px
+}
+
+.br.bph-split>.bc {
+    padding-left: 0;
+    padding-right: 0
+}
+
+.br.bph-split>.bc::after {
+    left: 0;
+    right: 0
+}
+
+.br.bph-split>.bc:first-child::after {
+    left: 50%;
+    right: -30px
+}
+
+.br.bph-split>.bc:last-child::after {
+    left: -30px;
+    right: 50%
+}
+
+.stk {
+    display: flex;
+    flex-direction: column;
+    align-items: center
+}
+
+@media (prefers-reduced-motion:reduce) {
+    .on {
+        transition: none
+    }
+}
+
