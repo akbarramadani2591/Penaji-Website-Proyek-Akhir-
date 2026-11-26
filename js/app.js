@@ -28,29 +28,18 @@ document.addEventListener("DOMContentLoaded", () => {
     return num ? `https://wa.me/${num}?text=${text}` : `https://api.whatsapp.com/send?text=${text}`;
   }
 
-  let isAdminLoggedIn = false;
-  const publicView = $("publicView"), adminView = $("adminView"), loginModal = $("loginModal"),
-    successModal = $("successModal"), lightboxModal = $("lightboxModal");
+  const successModal = $("successModal"), lightboxModal = $("lightboxModal");
 
   // Data disimpan di localStorage agar data aspirasi tidak hilang saat refresh.
   const STORE_KEY = "penaji.aspirasi.v1";
   try {
     const st = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
     if (Array.isArray(st) && st.length) { aspirationsData.length = 0; aspirationsData.push(...st); }
-  } catch (e) {}
-  const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(aspirationsData)); } catch (e) {} };
+  } catch (e) { }
+  const save = () => { try { localStorage.setItem(STORE_KEY, JSON.stringify(aspirationsData)); } catch (e) { } };
 
-  function switchScreen(screen) {
-    if (screen === "login") {
-      publicView.classList.remove("hidden"); adminView.classList.add("hidden");
-      loginModal.classList.remove("hidden"); return;
-    }
-    loginModal.classList.add("hidden");
-    const adm = screen === "admin";
-    if (adm) { isAdminLoggedIn = true; renderAdminTable(); }
-    publicView.classList.toggle("hidden", adm);
-    adminView.classList.toggle("hidden", !adm);
-    window.scrollTo({ top: 0, behavior: "auto" });
+  function escapeHtml(str) {
+    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   }
 
   // ===== Form aspirasi =====
@@ -107,108 +96,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   $("closeSuccessModalBtn").addEventListener("click", () => successModal.classList.add("hidden"));
 
-  // ===== Login pengurus (F-10) =====
-  const loginUsername = $("loginUsername"), loginPassword = $("loginPassword"), loginErrorBox = $("loginErrorBox");
-
-  $("openLoginBtn").addEventListener("click", () => {
-    if (isAdminLoggedIn) switchScreen("admin");
-    else { loginErrorBox.classList.add("hidden"); switchScreen("login"); }
-  });
-  $("closeLoginModalBtn").addEventListener("click", () => loginModal.classList.add("hidden"));
-  $("fillDemoCredBtn").addEventListener("click", () => {
-    loginUsername.value = "admin@hmjti";
-    loginPassword.value = "hmjti2026";
-    loginErrorBox.classList.add("hidden");
-  });
-  $("adminLoginForm").addEventListener("submit", (e) => {
-    e.preventDefault();
-    if (loginUsername.value.trim() === "admin@hmjti" && loginPassword.value.trim() === "hmjti2026") {
-      loginErrorBox.classList.add("hidden");
-      switchScreen("admin");
-    } else {
-      loginErrorBox.textContent = "Kredensial tidak valid. Gunakan akun demo: admin@hmjti / hmjti2026.";
-      loginErrorBox.classList.remove("hidden");
-    }
-  });
-  $("logoutAdminBtn").addEventListener("click", () => {
-    isAdminLoggedIn = false;
-    loginUsername.value = loginPassword.value = "";
-    switchScreen("public");
-  });
-
-  // ===== Panel admin: tabel (F-11) & export (F-12) =====
-  const adminTableBody = $("adminTableBody"), tableRowCount = $("tableRowCount"), adminSearchInput = $("adminSearchInput"),
-    adminFilterProdi = $("adminFilterProdi"), adminFilterKategori = $("adminFilterKategori"), adminFilterStatus = $("adminFilterStatus");
-
-  function getFilteredAspirations() {
-    const q = adminSearchInput.value.trim().toLowerCase(), prodi = adminFilterProdi.value,
-      kat = adminFilterKategori.value, st = adminFilterStatus.value;
-    return aspirationsData.filter((i) =>
-      (!q || i.pengirim.toLowerCase().includes(q) || i.isi.toLowerCase().includes(q) || i.prodi.toLowerCase().includes(q)) &&
-      (prodi === "all" || i.prodi === prodi) && (kat === "all" || i.kategori === kat) && (st === "all" || i.status === st));
-  }
-
-  function renderAdminTable() {
-    const filtered = getFilteredAspirations();
-    adminTableBody.innerHTML = "";
-    if (!filtered.length) {
-      adminTableBody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:28px; color:#64748B;">Tidak ada data aspirasi yang sesuai dengan kriteria pencarian/filter.</td></tr>`;
-      tableRowCount.textContent = "Menampilkan 0 data aspirasi";
-      return;
-    }
-    filtered.forEach((item, idx) => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td><strong>${idx + 1}</strong></td>
-        <td>${escapeHtml(item.tanggal)}</td>
-        <td><strong>${escapeHtml(item.pengirim)}</strong></td>
-        <td>${escapeHtml(item.prodi)}</td>
-        <td><span class="badge-blue">${escapeHtml(item.kategori)}</span></td>
-        <td>${escapeHtml(item.isi)}</td>
-        <td>
-          <select class="status-select st-${item.status}" data-id="${item.id}" aria-label="Ubah status aspirasi">
-            ${["Menunggu", "Diproses", "Selesai"].map((s) => `<option value="${s}" ${item.status === s ? "selected" : ""}>${s}</option>`).join("")}
-          </select>
-        </td>`;
-      adminTableBody.appendChild(tr);
-    });
-    tableRowCount.textContent = `Menampilkan ${filtered.length} dari ${aspirationsData.length} data aspirasi`;
-
-    adminTableBody.querySelectorAll(".status-select").forEach((sel) => sel.addEventListener("change", (e) => {
-      const item = aspirationsData.find((x) => x.id === Number(e.target.dataset.id));
-      if (item) {
-        item.status = e.target.value; save();
-        e.target.className = `status-select st-${item.status}`;
-      }
-    }));
-  }
-
-  function escapeHtml(str) {
-    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-  }
-
-  [adminSearchInput, adminFilterProdi, adminFilterKategori, adminFilterStatus].forEach((c) => {
-    c.addEventListener("input", renderAdminTable);
-    c.addEventListener("change", renderAdminTable);
-  });
-
-  // Export Excel (.xls berbasis HTML)
-  $("exportExcelBtn").addEventListener("click", () => {
-    let html = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel"><head><meta charset="UTF-8"></head><body><table border="1"><thead><tr style="background:#0A2647; color:#FFFFFF; font-weight:bold;"><th>No</th><th>Tanggal</th><th>Pengirim / NIM</th><th>Program Studi</th><th>Kategori Aspirasi</th><th>Isi Aspirasi</th><th>Status</th></tr></thead><tbody>`;
-    getFilteredAspirations().forEach((r, i) => {
-      html += `<tr><td>${i + 1}</td><td>${escapeHtml(r.tanggal)}</td><td>${escapeHtml(r.pengirim)}</td><td>${escapeHtml(r.prodi)}</td><td>${escapeHtml(r.kategori)}</td><td>${escapeHtml(r.isi)}</td><td>${r.status}</td></tr>`;
-    });
-    html += "</tbody></table></body></html>";
-    const url = URL.createObjectURL(new Blob([html], { type: "application/vnd.ms-excel" }));
-    const a = document.createElement("a");
-    a.href = url; a.download = "Rekap-Aspirasi-PENAJI-HMJTI.xls";
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
-
-  // Export PDF (cetak)
-  $("exportPdfBtn").addEventListener("click", () => window.print());
-
   // ===== Tampilan publik =====
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -223,7 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   const stagger = (box, mod = 3) => [...box.children].forEach((c, i) => c.style.setProperty("--i", i % mod));
 
-  // Struktur pengurus HMJTI (dideklarasikan sebelum renderProker karena dipakai untuk penanggung jawab)
+  // Struktur pengurus HMJTI (dipakai untuk penanggung jawab proker dan bagan hierarki)
   const BPH = [["Juliana Intan Purwaningtyas", "Ketua Himpunan"], ["ACH. Humaidi Aidil Kamal", "Wakil Ketua Himpunan"], ["Alya Rachma Kamila", "Sekretaris 1"], ["Nur Fitri Romadhan", "Sekretaris 2"], ["Agnees Serlita Anggun", "Bendahara 1"], ["Putri Amelia Balqis", "Bendahara 2"]];
   const DEP = [
     ["Administrasi", "Ahmad Maulana Febri Hananto", "Surat-menyurat, pengarsipan, dan pengelolaan keuangan organisasi."],
@@ -325,13 +212,41 @@ document.addEventListener("DOMContentLoaded", () => {
   });
   $("closeLightboxBtn").addEventListener("click", () => lightboxModal.classList.add("hidden"));
   lightboxModal.addEventListener("click", (e) => { if (e.target === lightboxModal) lightboxModal.classList.add("hidden"); });
-  addEventListener("keydown", (e) => { if (e.key === "Escape") [lightboxModal, successModal, loginModal].forEach((m) => m.classList.add("hidden")); });
+  addEventListener("keydown", (e) => { if (e.key === "Escape") [lightboxModal, successModal].forEach((m) => m.classList.add("hidden")); });
 
-  // Render struktur pengurus
-  const ini = (n) => n.replace(/[^A-Za-z ]/g, "").split(" ").filter(Boolean).slice(0, 2).map((w) => w[0]).join("").toUpperCase();
-  $("bphGrid").innerHTML = BPH.map(([n, r]) => `<div class="reveal"><div class="pp"><span class="av">${ini(n)}</span><div><b>${n}</b><span>${r}</span></div></div></div>`).join("");
-  $("depGrid").innerHTML = DEP.map(([d, n, t]) => `<div class="reveal"><div class="dp"><h4>${d}</h4><strong>${n}</strong><small>Kepala Departemen</small><p>${t}</p></div></div>`).join("");
-  stagger($("bphGrid")); stagger($("depGrid"));
+  // ===== Bagan hierarki kepengurusan =====
+  // Isi tiap departemen: "!" di depan = Co Biro (diberi warna berbeda). Nama anggota bisa ditambah lewat string "Jabatan|Nama".
+  const ORG_DEPT = {
+    "Perhubungan": ["Sekretaris Departemen", "!Co Biro Internal", "Anggota Biro Internal", "!Co Biro Eksternal", "Anggota Biro Eksternal"],
+    "Administrasi": ["Sekretaris Departemen", "!Co Biro Kesekretariatan", "Anggota Departemen"],
+    "Kewirausahaan": ["Sekretaris Departemen", "Anggota Departemen"],
+    "Kominfo": ["Sekretaris Departemen", "!Co Biro Sistem Informasi", "Anggota Biro Sistem Informasi", "!Co Biro Publikasi", "Anggota Biro Publikasi"],
+    "Keilmuan": ["!Co Biro Akademik", "Anggota Biro Akademik", "!Co Biro Non Akademik", "Anggota Biro Non Akademik"],
+  };
+  const ORG_ORDER = ["Perhubungan", "Administrasi", "Kewirausahaan", "Kominfo", "Keilmuan"];
+
+  const node = (title, sub, cls = "") => `<div class="on ${cls}"><b>${escapeHtml(title)}</b>${sub ? `<span>${escapeHtml(sub)}</span>` : ""}</div>`;
+  const vl = `<i class="vl"></i>`, vs = `<i class="vl s"></i>`;
+  const bph = (i) => node(BPH[i][1], BPH[i][0], "bph");
+
+  function deptColumn(name) {
+    const kadep = DEP.find((d) => d[0] === name);
+    const rows = [node("Departemen " + name, "", "dept"), node("Kepala Departemen", kadep ? kadep[1] : "", "sm kd")];
+    ORG_DEPT[name].forEach((r) => {
+      const co = r.startsWith("!");
+      rows.push(node(co ? r.slice(1) : r, "", "sm" + (co ? " co" : "")));
+    });
+    return `<div class="bc"><div class="stk">${rows.join(vs)}</div></div>`;
+  }
+
+  $("orgChart").innerHTML =
+    node(BPH[0][1], BPH[0][0], "top") + vl +
+    bph(1) + vl +
+    `<div class="br bph-split">
+       <div class="bc"><div class="stk">${bph(4)}${vl}${bph(5)}</div></div>
+       <div class="bc"><div class="stk">${bph(2)}${vl}${bph(3)}</div></div>
+     </div>` + vl +
+    `<div class="br">${ORG_ORDER.map(deptColumn).join("")}</div>`;
 
   // Navbar: state scroll, scrollspy, menu mobile
   const nav = $("topnav"), links = [...document.querySelectorAll(".tl")], mb = $("mobileMenuBtn");
